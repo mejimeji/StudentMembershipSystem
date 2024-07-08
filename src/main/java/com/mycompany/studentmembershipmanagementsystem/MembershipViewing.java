@@ -4,80 +4,385 @@
  */
 package com.mycompany.studentmembershipmanagementsystem;
 
-import java.awt.Color;
+import java.awt.*;
+import static java.awt.Color.black;
 import java.awt.event.*;
+import java.sql.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.border.LineBorder;
+import javax.swing.table.*;
 
-/**
- *
- * @author Harvey
- */
 public class MembershipViewing extends JFrame implements ActionListener {
-    
-//private JPanel header,footer; still working on this part
-    private JFrame frame = new JFrame ("STUDENT ATTENDANCE");
-    private JTable table;
-    private DefaultTableModel model;
-    private JButton addButton, deleteButton, returnButton;  
-    
-    public MembershipViewing() {
-        
-        String[] StudentInfo = { "Student No,","Last Name","First Name", "Middle Name","Course","Year","Address","Contact_No", "Birthday", "Position", "Affiliation" };
 
-        model = new DefaultTableModel(StudentInfo, 0);        
-        table = new JTable(model);        
-                     
-        //Buttons
-        addButton = new JButton("Add Student Grade");
-        addButton.addActionListener(this);
-        addButton.setBackground(Color.LIGHT_GRAY);
+    JFrame Frame;
+    JPanel headerPanel;
+    JLabel headerLabel, subheaderLabel, searchlbl;
+    JTable table;
+    Color tableBorderColor;
+    JTableHeader tableHeader;
+    JScrollPane scrollPane, showScrollPane;
+    CustomTableModel model;
+    JButton addButton, returnButton, delButton, updateButton, searchButton;
+    ImageIcon schoollogoyellow;
+    JTextField searcharea;
+    JTextArea showsearch;
+
+    MembershipViewing() {
+
+        Frame = new JFrame();
+        Frame.setTitle("Viewing of Student Record");
+        Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Frame.setPreferredSize(new Dimension(1000, 800));
+        Frame.getContentPane().setBackground(new Color(8, 143, 143));
+        Frame.setLayout(null);
+        Frame.pack();
+        Frame.setLocationRelativeTo(null);
+        Frame.setResizable(false);
+        Frame.setVisible(true);
+
+        headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(255, 222, 89));
+        headerPanel.setBounds(0, 0, 1000, 100);
+        headerPanel.setLayout(new BorderLayout());
+
+        schoollogoyellow = new ImageIcon("tniyellowsmall.png");
+        Image resizedlogoyellow = schoollogoyellow.getImage().getScaledInstance(130, 130, Image.SCALE_SMOOTH);
+        ImageIcon finallogoyellow = new ImageIcon(resizedlogoyellow);
+        JLabel logoyellow = new JLabel(finallogoyellow);
+        logoyellow.setBounds(160, 0, 130, 125);
+        headerPanel.add(logoyellow);
+
+        headerLabel = new JLabel("STUDENT RECORD", SwingConstants.CENTER);
+        headerLabel.setForeground(Color.BLACK);
+        headerLabel.setFont(new Font("Trajan Pro", Font.BOLD, 24));
+        headerLabel.setBounds(0, 15, 1000, 50);
+        headerPanel.add(headerLabel);
+
+        subheaderLabel = new JLabel("IBITS ORGANIZATION", SwingConstants.CENTER);
+        subheaderLabel.setBounds(0, 50, 1000, 40);
+        subheaderLabel.setFont(new Font("Trajan Pro", Font.BOLD, 16));
+        subheaderLabel.setForeground(black);
+        Frame.add(subheaderLabel);
+
+        searchlbl = new JLabel("Student No.");
+        searchlbl.setForeground(Color.BLACK);
+        searchlbl.setFont(new Font("Trajan Pro", Font.BOLD, 16));
+        searchlbl.setBounds(35, 115, 100, 30);
+
+        model = new CustomTableModel(new Object[]{"Student No", "Last Name", "First Name", "Middle Name", "Course", "Year", "Address", "Contact No", "Birthday", "Position", "Affiliation"}, 0);
+        table = new JTable(model);
+        table.setOpaque(false);
+        table.setBackground(new Color(245, 245, 220));
+
+        tableHeader = table.getTableHeader();
+        table.getTableHeader().setBackground(new Color(255, 222, 89));
+        table.getTableHeader().setForeground(black);
+        table.getTableHeader().setFont(new Font("Arial Black", Font.BOLD, 13));
+
+        scrollPane = new JScrollPane(table);
+        scrollPane.setBounds(35, 205, 900, 500);
+        tableBorderColor = new Color(0, 0, 0);
+        scrollPane.setBorder(new LineBorder(tableBorderColor, 8));
+
+        searcharea = new JTextField();
+        searcharea.setBounds(145, 115, 200, 30);
+        searcharea.setBorder(new LineBorder(tableBorderColor, 2));
+
+        showsearch = new JTextArea();
+        showsearch.setBorder(new LineBorder(tableBorderColor, 2));
+        showsearch.setEditable(true);
+
+        showScrollPane = new JScrollPane(showsearch);
+        showScrollPane.setBounds(507, 115, 240, 80);
+        showScrollPane.setBorder(new LineBorder(tableBorderColor, 1));
+
+        searchButton = new JButton("Search");
+        searchButton.setFont(new Font("Serif", Font.BOLD, 16));
+        searchButton.setForeground(black);
+        searchButton.setBackground(new Color(255, 222, 89));
+        searchButton.setOpaque(true);
+        searchButton.setBorder(null);
+        searchButton.setBounds(365, 115, 120, 30);
+        searchButton.addActionListener(this);
+        searchButton.setBorder(new LineBorder(tableBorderColor, 2));
+
         
-        deleteButton = new JButton("Delete Student Grade");
-        deleteButton.addActionListener(this);
-        deleteButton.setBackground(Color.LIGHT_GRAY);
+
+        delButton = new JButton("Delete");
+        delButton.setFont(new Font("Serif", Font.BOLD, 16));
+        delButton.setForeground(black);
+        delButton.setBackground(new Color(255, 222, 89));
+        delButton.setOpaque(true);
+        delButton.setBorder(null);
+        delButton.setBounds(40, 715, 150, 30);
+        delButton.addActionListener(this);
+        delButton.setBorder(new LineBorder(tableBorderColor, 2));
+
+        updateButton = new JButton("Update");
+        updateButton.setFont(new Font("Serif", Font.BOLD, 16));
+        updateButton.setForeground(black);
+        updateButton.setBackground(new Color(255, 222, 89));
+        updateButton.setOpaque(true);
+        updateButton.setBorder(null);
+        updateButton.setBounds(765, 115, 150, 30);
+        updateButton.addActionListener(this);
+        updateButton.setBorder(new LineBorder(tableBorderColor, 2));
         
+
         returnButton = new JButton("Return");
+        returnButton.setFont(new Font("Serif", Font.BOLD, 16));
+        returnButton.setForeground(black);
+        returnButton.setBackground(new Color(255, 222, 89));
+        returnButton.setOpaque(true);
+        returnButton.setBorder(null);
+        returnButton.setBounds(780, 715, 150, 30);
         returnButton.addActionListener(this);
-        returnButton.setBackground(Color.LIGHT_GRAY);
+        returnButton.setBorder(new LineBorder(tableBorderColor, 2));
+
+        Frame.add(scrollPane);
+        Frame.add(headerPanel);
         
-        JScrollPane scrollPane = new JScrollPane(table);
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addButton);
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(returnButton);
-          
-        //frame
-        frame.add(scrollPane, java.awt.BorderLayout.CENTER);
-        frame.add(buttonPanel, java.awt.BorderLayout.SOUTH);      
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);      
-        frame.setVisible(true);
-        frame.setSize(800,600 );
-        frame.setResizable(false);
-     
- 
+        Frame.add(delButton);
+        Frame.add(returnButton);
+        Frame.add(updateButton);
+        Frame.add(searcharea);
+        Frame.add(searchlbl);
+        Frame.add(showScrollPane); // Add showScrollPane instead of showsearch
+        Frame.add(searchButton);
+        Frame.pack();
+        Frame.setVisible(true);
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_pupcite", "root", "");
+            Statement st = conn.createStatement();
+            String query = "SELECT * FROM tbl_pupcite";
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                String stud_ID = rs.getString("stud_ID");
+                String LName = rs.getString("LName");
+                String FName = rs.getString("FName");
+                String MName = rs.getString("MName");
+                String course = rs.getString("course");
+                String year = rs.getString("year");
+                String address = rs.getString("address");
+                String contact_no = rs.getString("contact_no");
+                String Bday = rs.getString("Bday");
+                String Position = rs.getString("Position");
+                String Affiliation = rs.getString("Affiliation");
+
+                String tblInfo[] = {stud_ID, LName, FName, MName, course, year, address, contact_no, Bday, Position, Affiliation};
+                DefaultTableModel tbl = (DefaultTableModel) table.getModel();
+                tbl.addRow(tblInfo);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Override
-    //Button Actions
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == addButton) {
-
-            model.addRow(new Object[model.getColumnCount()]);
-        }else if (e.getSource() == returnButton) {
-           frame.dispose();
-           WelcomePage wp = new WelcomePage();
-           wp.setVisible(true);
         
-        }else if (e.getSource() == deleteButton) {
+        if (e.getSource() == returnButton) {
+            Frame.dispose();
+            WelcomePage wp = new WelcomePage();
+            wp.setVisible(true);
+        } else if (e.getSource() == delButton) {
+            deleteStudentRecord();
+        } else if (e.getSource() == searchButton) {
+            searchStudentRecord();
+        } else if (e.getSource() == updateButton) {
+            updateStudentRecord();
+        }
+    }
 
-            int selectedRow = table.getSelectedRow();
-            if (selectedRow != -1) {
-                model.removeRow(selectedRow);
+    private void deleteStudentRecord() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow != -1) {
+            // Get the student number (assuming it's in the first column)
+            String studentNo = (String) model.getValueAt(selectedRow, 0);
+
+            // Confirm deletion
+            int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete student number: " + studentNo + "?", "Delete", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                try {
+                    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_pupcite", "root", "");
+                    String query = "DELETE FROM tbl_pupcite WHERE stud_ID = ?";
+                    PreparedStatement pst = conn.prepareStatement(query);
+                    pst.setString(1, studentNo);
+                    pst.executeUpdate();
+                    conn.close();
+
+                    // Remove the row from the table model
+                    model.removeRow(selectedRow);
+                    JOptionPane.showMessageDialog(this, "Student record deleted successfully.");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+                }
+            }
         } else {
-                JOptionPane.showMessageDialog(frame, "Select a row to delete!");
+            JOptionPane.showMessageDialog(this, "Please select a student record to delete.");
+        }
+    }
+
+    private void searchStudentRecord() {
+        String studentNo = searcharea.getText().trim();
+        if (studentNo.isEmpty()) {
+            showsearch.setText("Please enter a student number to search.");
+            return;
+        }
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_pupcite", "root", "");
+            String query = "SELECT * FROM tbl_pupcite WHERE stud_ID = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, studentNo);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                String stud_ID = rs.getString("stud_ID");
+                String LName = rs.getString("LName");
+                String FName = rs.getString("FName");
+                String MName = rs.getString("MName");
+                String course = rs.getString("course");
+                String year = rs.getString("year");
+                String address = rs.getString("address");
+                String contact_no = rs.getString("contact_no");
+                String Bday = rs.getString("Bday");
+                String Position = rs.getString("Position");
+                String Affiliation = rs.getString("Affiliation");
+
+                showsearch.setText("Student No: " + stud_ID + "\nLast Name: " + LName + "\nFirst Name: " + FName +
+                        "\nMiddle Name: " + MName + "\nCourse: " + course + "\nYear: " + year + "\nAddress: " + address +
+                        "\nContact No: " + contact_no + "\nBirthday: " + Bday + "\nPosition: " + Position +
+                        "\nAffiliation: " + Affiliation);
+            } else {
+                showsearch.setText("No record found for student number: " + studentNo);
+            }
+            conn.close();
+        } catch (Exception ex) {
+            showsearch.setText("Error: " + ex.getMessage());
+        }
+    }
+
+    private void updateStudentRecord() {
+        String text = showsearch.getText().trim();
+        if (text.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No student record selected for update.");
+            return;
+        }
+
+        String[] lines = text.split("\n");
+        String[] data = new String[11];
+        for (String line : lines) {
+            String[] keyValue = line.split(": ");
+            switch (keyValue[0]) {
+                case "Student No":
+                    data[0] = keyValue[1];
+                    break;
+                case "Last Name":
+                    data[1] = keyValue[1];
+                    break;
+                case "First Name":
+                    data[2] = keyValue[1];
+                    break;
+                case "Middle Name":
+                    data[3] = keyValue[1];
+                    break;
+                case "Course":
+                    data[4] = keyValue[1];
+                    break;
+                case "Year":
+                    data[5] = keyValue[1];
+                    break;
+                case "Address":
+                    data[6] = keyValue[1];
+                    break;
+                case "Contact No":
+                    data[7] = keyValue[1];
+                    break;
+                case "Birthday":
+                    data[8] = keyValue[1];
+                    break;
+                case "Position":
+                    data[9] = keyValue[1];
+                    break;
+                case "Affiliation":
+                    data[10] = keyValue[1];
+                    break;
             }
         }
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_pupcite", "root", "");
+            String query = "UPDATE tbl_pupcite SET LName = ?, FName = ?, MName = ?, course = ?, year = ?, address = ?, contact_no = ?, Bday = ?, Position = ?, Affiliation = ? WHERE stud_ID = ?";
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(1, data[1]);
+            pst.setString(2, data[2]);
+            pst.setString(3, data[3]);
+            pst.setString(4, data[4]);
+            pst.setString(5, data[5]);
+            pst.setString(6, data[6]);
+            pst.setString(7, data[7]);
+            pst.setString(8, data[8]);
+            pst.setString(9, data[9]);
+            pst.setString(10, data[10]);
+            pst.setString(11, data[0]);
+            pst.executeUpdate();
+            conn.close();
+
+            // Refresh the table data
+            refreshTableData();
+
+            JOptionPane.showMessageDialog(this, "Student record updated successfully.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+        }
+    }
+
+    private void refreshTableData() {
+        model.setRowCount(0); // Clear the table
+
+        try {
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_pupcite", "root", "");
+            Statement st = conn.createStatement();
+            String query = "SELECT * FROM tbl_pupcite";
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                String stud_ID = rs.getString("stud_ID");
+                String LName = rs.getString("LName");
+                String FName = rs.getString("FName");
+                String MName = rs.getString("MName");
+                String course = rs.getString("course");
+                String year = rs.getString("year");
+                String address = rs.getString("address");
+                String contact_no = rs.getString("contact_no");
+                String Bday = rs.getString("Bday");
+                String Position = rs.getString("Position");
+                String Affiliation = rs.getString("Affiliation");
+
+                String tblInfo[] = {stud_ID, LName, FName, MName, course, year, address, contact_no, Bday, Position, Affiliation};
+                DefaultTableModel tbl = (DefaultTableModel) table.getModel();
+                tbl.addRow(tblInfo);
+            }
+            conn.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void main(String[] args) {
+        
+    }
+
+    // Custom table model to make cells non-editable
+    class CustomTableModel extends DefaultTableModel {
+        CustomTableModel(Object[] columnNames, int rowCount) {
+            super(columnNames, rowCount);
+        }
+
     }
 }
 

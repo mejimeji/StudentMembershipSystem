@@ -22,8 +22,8 @@ public class StudentMembershipManagementSystem {
             public void run(){ 
                 WelcomePage wp = new WelcomePage();
                 wp.setVisible(true);
-                MembershipForm mf = new MembershipForm();
-                mf.setVisible(true);
+//                MembershipViewing mf = new MembershipViewing();
+//                mf.setVisible(true);
             }
         });
     }
