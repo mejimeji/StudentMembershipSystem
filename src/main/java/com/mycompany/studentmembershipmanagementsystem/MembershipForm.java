@@ -9,12 +9,14 @@ import javax.swing.border.LineBorder;
 
 
 public class MembershipForm extends JFrame implements ActionListener {
-
+    
+    
     private JLabel hdrMembership, lblFirstName, lblLastName, lblMiddleName, lblStudentNo, lblCourse, lblYear, lblAddress, lblcontact, lblbday, lblpos, lblaffil;
     private JButton btnSignUp, btnReturn, btnClear;
     private JTextField txtFirstName, txtLastName, txtMiddleName, txtStudentNo, txtCourse, txtYear, txtAddress, txtcontact, txtbday, txtpos, txtaffil;
     private JPanel headerPanel;
     Color tableBorderColor;
+    ImageIcon ibitslg;
     
     MembershipForm() {
 
@@ -23,19 +25,28 @@ public class MembershipForm extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setResizable(false);
+        setLocationRelativeTo(null);
         getContentPane().setBackground(new java.awt.Color(8, 143, 143));
 
+        
         
         headerPanel = new JPanel();
         headerPanel.setBackground(new Color(255, 222, 89));
         headerPanel.setBounds(0, 0, 800, 100);
         headerPanel.setLayout(null);
 
+        ibitslg = new ImageIcon("ibitslg.png");
+        Image resizedlogoyellow = ibitslg.getImage().getScaledInstance(80,80, Image.SCALE_SMOOTH);
+        ImageIcon finallogoyellow = new ImageIcon(resizedlogoyellow);
+        JLabel logoyellow = new JLabel(finallogoyellow);
+        logoyellow.setBounds(120,0,130,100);
+        headerPanel.add(logoyellow);
+        
         hdrMembership = new JLabel("Membership Form", SwingConstants.CENTER);
         hdrMembership.setBounds(0, 30, 800, 50);
-        hdrMembership.setFont(new Font("Serif", Font.PLAIN, 40));
-        headerPanel.add(hdrMembership);  // Add header label to header panel
-        add(headerPanel);  // Add header panel to frame
+        hdrMembership.setFont(new Font("Serif", Font.BOLD, 40));
+        headerPanel.add(hdrMembership);  
+        add(headerPanel); 
 
         lblStudentNo = new JLabel("Student No:");
         lblStudentNo.setBounds(70, 150, 100, 15);
@@ -43,6 +54,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtStudentNo = new JTextField();
         txtStudentNo.setBounds(30, 170, 150, 30);
+        txtStudentNo.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtStudentNo);
 
         lblFirstName = new JLabel("First Name:");
@@ -51,6 +63,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtFirstName = new JTextField();
         txtFirstName.setBounds(220, 170, 150, 30);
+        txtFirstName.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtFirstName);
 
         lblLastName = new JLabel("Last Name:");
@@ -59,6 +72,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtLastName = new JTextField();
         txtLastName.setBounds(410, 170, 150, 30);
+        txtLastName.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtLastName);
 
         lblMiddleName = new JLabel("Middle Name:");
@@ -67,6 +81,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtMiddleName = new JTextField();
         txtMiddleName.setBounds(600, 170, 150, 30);
+        txtMiddleName.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtMiddleName);
 
         lblCourse = new JLabel("Course:");
@@ -75,6 +90,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtCourse = new JTextField();
         txtCourse.setBounds(30, 270, 150, 30);
+        txtCourse.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtCourse);
 
         lblYear = new JLabel("Year:");
@@ -83,6 +99,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtYear = new JTextField();
         txtYear.setBounds(220, 270, 150, 30);
+        txtYear.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtYear);
 
         lblAddress = new JLabel("Address:");
@@ -91,6 +108,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtAddress = new JTextField();
         txtAddress.setBounds(410, 270, 150, 30);
+        txtAddress.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtAddress);
 
         lblcontact = new JLabel("Contact:");
@@ -99,6 +117,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtcontact = new JTextField();
         txtcontact.setBounds(600, 270, 150, 30);
+        txtcontact.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtcontact);
 
         lblbday = new JLabel("Birthday:");
@@ -107,6 +126,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtbday = new JTextField();
         txtbday.setBounds(115, 370, 150, 30);
+        txtbday.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtbday);
 
         lblpos = new JLabel("Position:");
@@ -115,6 +135,7 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtpos = new JTextField();
         txtpos.setBounds(315, 370, 150, 30);
+        txtpos.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtpos);
 
         lblaffil = new JLabel("Affiliation:");
@@ -123,9 +144,10 @@ public class MembershipForm extends JFrame implements ActionListener {
 
         txtaffil = new JTextField();
         txtaffil.setBounds(510, 370, 150, 30);
+        txtaffil.setBorder(new LineBorder(tableBorderColor, 2));
         add(txtaffil);
 
-        btnSignUp = new JButton("Sign up");
+        btnSignUp = new JButton("Submit");
         btnSignUp.setBounds(270, 450, 100, 30);
         add(btnSignUp);
         btnSignUp.addActionListener(this);
@@ -133,7 +155,7 @@ public class MembershipForm extends JFrame implements ActionListener {
         btnSignUp.setBackground(new Color(255, 222, 89));
 
         btnReturn = new JButton("Return");
-        btnReturn.setBounds(35, 450, 100, 30);
+        btnReturn.setBounds(35, 510, 100, 30);
         add(btnReturn);
         btnReturn.addActionListener(this);
         btnReturn.setBorder(new LineBorder(tableBorderColor, 2));
@@ -189,7 +211,7 @@ public class MembershipForm extends JFrame implements ActionListener {
             }
         } else if (e.getSource() == btnReturn) {
             dispose();
-            WelcomePage welcomePage = new WelcomePage();
+            MembershipViewing welcomePage = new MembershipViewing();
             welcomePage.setVisible(true);
         } else if (e.getSource() == btnClear) {
             clearFields();
