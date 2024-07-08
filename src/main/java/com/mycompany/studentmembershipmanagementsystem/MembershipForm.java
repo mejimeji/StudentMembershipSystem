@@ -106,11 +106,17 @@ public class MembershipForm extends JFrame implements ActionListener {
         btnSignUp.setBounds(335, 450, 100, 30);
         add(btnSignUp);
         btnSignUp.setVisible(true);
-        
+        btnSignUp.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == btnSignUp){
+        dispose();
+        WelcomePage wp = new WelcomePage();
+        wp.setVisible(true);
+        }
+        
         
     }
     

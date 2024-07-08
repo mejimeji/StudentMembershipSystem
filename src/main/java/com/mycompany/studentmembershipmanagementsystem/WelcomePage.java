@@ -64,7 +64,7 @@ public class WelcomePage extends JFrame implements ActionListener {
         btnLogin = new JButton("Log in");
         btnLogin.setBounds(290, 445, 90, 30);
         add(btnLogin);
-        
+        btnLogin.addActionListener(this);
        
         
         
@@ -77,7 +77,9 @@ public class WelcomePage extends JFrame implements ActionListener {
             MembershipForm MF = new MembershipForm();
             MF.setVisible(true);
         } else if(e.getSource() == btnLogin){
-        
+            dispose();
+            MembershipViewing mv = new MembershipViewing();
+            
        }
     }
     

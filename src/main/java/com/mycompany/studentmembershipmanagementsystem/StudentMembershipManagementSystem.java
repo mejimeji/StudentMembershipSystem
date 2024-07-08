@@ -7,10 +7,14 @@ package com.mycompany.studentmembershipmanagementsystem;
 
 import java.awt.EventQueue;
 
+
+
 /**
  *
  * @author Harvey
  */
+
+
 public class StudentMembershipManagementSystem {
 
     public static void main(String[] args) {
@@ -18,7 +22,8 @@ public class StudentMembershipManagementSystem {
             public void run(){ 
                 WelcomePage wp = new WelcomePage();
                 wp.setVisible(true);
-                
+                MembershipForm mf = new MembershipForm();
+                mf.setVisible(true);
             }
         });
     }
